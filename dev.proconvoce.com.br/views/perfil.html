@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="../img/favicon.ico">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <title>Procon Web - Perfil</title>
+  <!-- fontawesome -->
+  <script src="../vendor/fontawesome-free/js/all.js"></script>
+
+  <!-- Firebase-->
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <!-- CSS personalizado -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/cards.css">
+  <link rel="stylesheet" href="../css/animate.css">
+
+  <style>
+    .container {
+      background-image: url('../login/images/bg-01.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      margin-top: 10%;
+    }
+
+    .avatar-upload {
+      position: relative;
+      max-width: 205px;
+      margin: 50px auto;
+    }
+
+    .avatar-upload .avatar-edit {
+      position: absolute;
+      right: 12px;
+      z-index: 1;
+      top: 10px;
+    }
+
+    .avatar-upload .avatar-edit input {
+      display: none;
+    }
+
+    .avatar-upload .avatar-edit input+label {
+      display: inline-block;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 0;
+      border-radius: 100%;
+      background: #FFFFFF;
+      border: 1px solid transparent;
+      box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+      cursor: pointer;
+      font-weight: normal;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .avatar-upload .avatar-edit input+label:hover {
+      background: #f1f1f1;
+      border-color: #d6d6d6;
+    }
+
+    .avatar-upload .avatar-edit input+label:after {
+      content: "\f040";
+      font-family: 'FontAwesome';
+      color: #757575;
+      position: absolute;
+      top: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      margin: auto;
+    }
+
+    .avatar-upload .avatar-preview {
+      width: 192px;
+      height: 192px;
+      position: relative;
+      border-radius: 100%;
+      border: 6px solid #F8F8F8;
+      box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+    }
+
+    .avatar-upload .avatar-preview>div {
+      width: 100%;
+      height: 100%;
+      border-radius: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  </style>
+</head>
+
+<body class="container text-center">
+
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-4 col-sm-12">
+
+        <!-- Avatar -->
+        <div class="avatar-upload">
+          <div class="avatar-preview">
+            <div id="imagePreview">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Avatar -->
+
+      <div class="col-md-8 col-sm-12" style="color: white;">
+
+        <!-- Dados -->
+        <h1 style="color: white;">
+          <div id="nameUser"></div>
+        </h1>
+        <h2>
+          <div id="emailUser"></div>
+        </h2>
+        <hr>
+        <button class="btn btn-outline-light" data-toggle="modal" data-target=".bs-example-modal-sm"><i
+            class="fas fa-cog"></i> Configurações
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preloader -->
+
+  <div id="preloader">
+    <div class="spinner">
+      <div class="rect1"></div>
+      <div class="rect2"></div>
+      <div class="rect3"></div>
+      <div class="rect4"></div>
+      <div class="rect5"></div>
+    </div>
+  </div>
+
+  <!-- Modal de opções -->
+
+  <div class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Opções:</h4>
+        </div>
+        <div class="modal-body">
+          <div class="text-center p-t-8 p-b-31">
+            <a href="../login/recuperar_senha.html">
+              <i class="fas fa-unlock-alt"></i> Alterar senha
+            </a>
+          </div>
+        </div>
+        <div class="modal-footer"><a href="javascript:;" class="btn btn-outline-primary btn-sm btn-block">
+            <h2 id="Logout"><i class="fas fa-sign-out-alt"></i> Sair</h2>
+          </a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu -->
+
+  <div class="menu"></div>
+
+  <script>
+    $(window).on('load', function () {
+      $('.menu').load('menu.html');
+      $('.menu').addClass('hiden');
+    });
+
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $('#imagePreview').hide();
+          $('#imagePreview').fadeIn(650);
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    $("#imageUpload").change(function () {
+      readURL(this);
+    });        
+  </script>
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="../vendor/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src="../js/index.js"></script>
+  <script src="../js/cesta.js"></script>
+  <!-- Autenticação de usuario -->
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyACRG5j_6gR-mZK8o80jD3ZGSHyTgMzxe0",
+      authDomain: "proconvoce.firebaseapp.com",
+      databaseURL: "https://proconvoce.firebaseio.com",
+      projectId: "proconvoce",
+      storageBucket: "proconvoce.appspot.com",
+      messagingSenderId: "645245522688",
+      appId: "1:645245522688:web:0e6b79e6cc9aae31"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+  </script>
+  <script src="../login/js/auth.js"></script>
+</body>
+
+</html>

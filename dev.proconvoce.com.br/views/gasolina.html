@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="../img/favicon.ico">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <title>Procon Web - Combustíveis</title>
+  <!-- fontawesome -->
+  <script src="../vendor/fontawesome-free/js/all.js"></script>
+
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <!-- Firebase-->  	
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+
+  <!-- CSS personalizado -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/cards.css">
+  <link rel="stylesheet" href="../css/animate.css">
+  
+  <style>
+  .card {
+    max-width: 400px;
+  min-width: 360px;
+  display: block;;
+  }
+  h4 {
+    word-wrap: break-word;
+    max-width: 100px;
+  }
+  i {
+    font-size: 0.3em;
+  }
+  </style>
+</head>
+<body class=" text-center">
+  <div id="preloader">
+      <div class="spinner">
+          <div class="rect1"></div>
+          <div class="rect2"></div>
+          <div class="rect3"></div>
+          <div class="rect4"></div>
+          <div class="rect5"></div>
+      </div>
+  </div>
+  <div id="container justify-content-center">
+      <div id="navigationBar" class="d-none d-md-block"></div>
+    <h1>Menores preços de combustíveis em Itajubá</h1>
+   <hr>
+    <h2><i class="fas fa-gas-pump"></i> Gasolina
+        <div class="btn-group dropright">
+            <button type="button" class="btn bg-transparent btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <i style="color: #888;" class="fas fa-info-circle"></i>
+            </button>
+            <div class="dropdown-menu">
+              Valores na promoção no dinheiro e no cartão de débito
+            </div>
+          </div>
+      </h2>
+    <div class="scrolling-wrapper" id="cardsAreaGasolina"></div>
+<hr>
+    <h2><i class="fas fa-gas-pump"></i> Etanol
+        <div class="btn-group dropright">
+            <button type="button" class="btn bg-transparent btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <i style="color: #888;" class="fas fa-info-circle"></i>
+            </button>
+            <div class="dropdown-menu">
+              Valores na promoção no dinheiro e no cartão de débito
+            </div>
+          </div>    
+    </h2>
+      
+    <div class="scrolling-wrapper" id="cardsAreaEtanol">
+      
+    </div>
+<hr>
+    <h2><i class="fas fa-gas-pump"></i> Diesel</h2>
+    <div class="scrolling-wrapper" id="cardsAreaDiesel">
+      
+    </div>
+    <!-- informações em baixo das cards -->
+    <div id="escolhaCombustivel" class="container-fluid text-right mb-4">
+      <h3 id="escolha"></h3>
+      <div id="escolhaInfo" class="container text-center hide">
+        <hr>
+        <span>Para carros flex é preciso ter cautela ao escolher que forma abastecer. A principal diferença de preços e
+          vantagens entre os dois combustíveis está na proporção preço X desempenho. Para o álcool ser mais vantajoso do
+          que
+          a gasolina, o preço do litro tem que custar até 30% mais barato que o litro da gasolina.</span>
+        <hr>
+      </div>
+    </div>
+    <!-- graficos -->
+    <hr>
+    <div class="container">
+      <h3 class="section-title mt-4"><i class="fas fa-chart-line"></i> Histórico</h3>
+    </div>
+    <div class="d-flex align-content-around" id="chartArea">
+      <!-- Page level plugins -->
+      <script src="../vendor/chart.js/Chart.min.js"></script>
+      <canvas class='col-xs-12 col-md-4' id="chartDie" height="230px"></canvas>
+      <canvas class='col-xs-12 col-md-4' id="chartEta" height="230px"></canvas>
+      <canvas class='col-xs-12 col-md-4' id="chartGas" height="230px"></canvas>
+
+    </div>
+    <hr>
+    <!-- tabela de combustiveis -->
+    <div id="tabela" class="table-responsive container">
+      <h3 class="section-title mt-4"><i class="fas fa-history"></i> Ultimas pesquisas de menores preços:</h3>
+      <!-- divs no topo da tabela -->
+      <ul class="nav nav-tabs justify-content-center nav-fill" id="pills-tab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
+            aria-controls="pills-home" aria-selected="true">Gasolina</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab"
+            aria-controls="pills-profile" aria-selected="false">Etanol</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-diesel-tab" data-toggle="pill" href="#pills-diesel" role="tab"
+            aria-controls="pills-diesel" aria-selected="false">Diesel</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+          <table class="table">
+            <thead>
+              <th><i class="fas fa-dolly"></i> Fornecedor</th>
+              <th><i class="far fa-calendar-alt"></i> Data</th>
+              <th><i class="fas fa-dollar-sign"></i> Preço</th>
+            </thead>
+            <tbody id='tabelaGasolina'>
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+          <table class="table">
+            <thead>
+              <th><i class="fas fa-dolly"></i> Fornecedor</th>
+              <th><i class="far fa-calendar-alt"></i> Data</th>
+              <th><i class="fas fa-dollar-sign"></i> Preço</th>
+            </thead>
+            <tbody id='tabelaEtanol'>
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="pills-diesel" role="tabpanel" aria-labelledby="pills-diesel-tab">
+          <table class="table">
+            <thead>
+              <th><i class="fas fa-dolly"></i> Fornecedor</th>
+              <th><i class="far fa-calendar-alt"></i> Data</th>
+              <th><i class="fas fa-dollar-sign"></i> Preço</th>
+            <tbody id='tabelaDiesel'>
+            </tbody>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="feedbackArea">
+    </div>
+
+    <div class="menu"></div>
+
+  </div>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="../vendor/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src="../js/index.js"></script>
+  <script src="../js/gasolina.js"></script>
+  <script>
+    
+    $(window).on('load',function() {
+          $('.menu').load('menu.html');
+          $('.menu').addClass('hiden');
+      });
+      
+    </script>
+  <!-- Autenticação de usuario -->
+  <script>
+	  // Your web app's Firebase configuration
+	  var firebaseConfig = {
+	    apiKey: "AIzaSyACRG5j_6gR-mZK8o80jD3ZGSHyTgMzxe0",
+	    authDomain: "proconvoce.firebaseapp.com",
+	    databaseURL: "https://proconvoce.firebaseio.com",
+	    projectId: "proconvoce",
+	    storageBucket: "proconvoce.appspot.com",
+	    messagingSenderId: "645245522688",
+	    appId: "1:645245522688:web:0e6b79e6cc9aae31"
+	  };
+	  // Initialize Firebase
+	  firebase.initializeApp(firebaseConfig);
+
+	</script>
+  <script src="../login/js/auth.js"></script>
+</body>
+
+</html>

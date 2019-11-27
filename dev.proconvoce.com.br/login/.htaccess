@@ -1,0 +1,4 @@
+# CONFIGURAR UTILIZAÇÃO DO HTTPS
+RewriteEngine On
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://dev.proconvoce.com.br/$1 [R,L]
