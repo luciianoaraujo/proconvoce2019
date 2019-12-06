@@ -1,18 +1,21 @@
-<!-- Modelo Procon SP: -->
-<!-- Área para cadastrar consumidor:
-        PESSOA:
-            'Deseja incluir Nome Social' (Decreto nº8.727/2016) - Se sim: Nome Social e Gênero (Masculinidade ou Feminilidade),
+<!--
 
-            'Pessoa com deficiência?' - Se sim: Tipo de Deficiência,
-    -->
-<!-- Registro de Atendimento - Reclamação:
+Reclamação Individual
 
-            Sou titular da compra ou contratação (Checkbox)
-            "Apenas o titular da compra ou contratação, poderá solicitar uma reclamação na internet. Se você não for o titular desta solicitação, deverá ir a um de nossos postos nos Poupatempos com uma procuração"
+Preferencial (?)
+Sou titular da compra ou contratação
 
-            Identificação:
-            https://prnt.sc/pbv0b0
-    -->
+Comrpovante de endereço
+Imagem CPF
+Imagem RG
+
+Selecione a empresa que você deseja fazer a reclamação
+Descrição da Reclamação
+Adicione imagens
+
+Informe a solução esperada
+
+-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,10 +32,6 @@
     <!-- fontawesome -->
     <script src="../vendor/fontawesome-free/js/all.js"></script>
     <script src="https://kit.fontawesome.com/4a9647b8f2.js" crossorigin="anonymous"></script>
-
-    <!-- Firebase-->  	
-    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
 
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -241,6 +240,44 @@
         });
     </script>
 
+    <!-- <script>
+        // http://itajuba.myscriptcase.com/scriptcase/devel/conf/grp/Procon/libraries/php/fornecedor_detalhe.php?id=44
+        $(document).ready(function() {
+            function limpa_formulário() {
+                $("#idEmpresa").val("");
+                $("#nomeEmpresa").val("");
+            }
+
+            $("#idEmpresa").blur(function() {
+                var id = $(this).val().replace(/\D/g, '');
+                if (id != "") {
+                
+                    $("#nomeEmpresa").val("Preenchendo...");
+                    
+
+                    $.getJSON("http://itajuba.myscriptcase.com/scriptcase/devel/conf/grp/Procon/libraries/php/fornecedor_detalhe.php?id="+ id, function(data) {
+
+                        if (!("erro" in data)) {
+
+                            var dados = JSON.parse(data);
+
+                            $("#nomeEmpresa").val(dados.fornecedor_detalhe);
+
+                        } else {
+
+                            limpa_formulário();
+
+                            alert("Erro: ID não encontrado.");
+                        }
+                    });
+                } else {
+                    limpa_formulário();
+                }
+            });
+
+        });
+    </script> -->
+
     <!-- Abrir Modal -->
     <script type="text/javascript">
         $(function(){
@@ -328,26 +365,18 @@
             </div>
             <div class="card-body">
                 <!-- Nav Tabs -->
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-tabs justify-content-center">
                     <li class="nav-item px-1">
-                        <a class="nav-link active" data-toggle="tab" href="#consumidor">Consumidor</a>
+                        <a class="nav-link active" data-toggle="tab" href="#consumidor"><i class="fas fa-user"></i></a>
                     </li>
                     <li class="nav-item px-1">
-                        <a class="nav-link" data-toggle="tab" href="#fornecedor">Fornecedor</a>
+                        <a class="nav-link" data-toggle="tab" href="#fornecedor"><i class="fas fa-store"></i></a>
                     </li>
                     <li class="nav-item px-1">
-                        <a class="nav-link" data-toggle="tab" href="#detalhes">Detalhes</a>
-                    </li>
-                    <li class="nav-item px-1">
-                        <a class="nav-link" data-toggle="tab" href="#reclamacao">Reclamação</a>
-                    </li>
-                    <li class="nav-item px-1">
-                        <a class="nav-link disabled" data-toggle="tab" href="#anexos">Anexos</a>
-                    </li>
-                    <li class="nav-item px-1">
-                        <a class="nav-link disabled" data-toggle="tab" href="#finalizar">Finalizar</a>
+                        <a class="nav-link" data-toggle="tab" href="#detalhes"><i class="far fa-edit"></i></a>
                     </li>
                 </ul>
+
                 <!-- Tab Panes -->
                 <div class="tab-content">
                     <!-- Consumidor -->
@@ -363,26 +392,27 @@
                                                 <!-- Email -->
                                                 <div class="form-group">
                                                     <label for="email">Endereço de Email</label>
-                                                    <input type="email" class="form-control" id='email' aria-describedby="emailHelp" value="exemplo@gmail.com" readonly>                                        
+                                                    <input type="email" class="form-control" id='email'value="exemplo@gmail.com" readonly required>
                                                 </div>
                                                 <!-- Nome Completo -->
                                                 <div class="form-group">
-                                                    <label for="nomeCompleto">Nome Completo <span class='text-danger'><b>*</b></span></label>
-                                                    <input type="text" class="form-control" id='nomeCompleto' required>
+                                                    <label for="nome_completo">Nome Completo <span class='text-danger'><b>*</b></span></label>
+                                                    <input name='nome_completo' type="text" class="form-control" id='nome_completo' required>
                                                 </div>
                                                 <!-- Sexo -->
                                                 <div class="form-group">
                                                     <label for="sexo">Sexo <span class='text-danger'><b>*</b></span></label>
-                                                    <select id="sexo" class="form-control" required>
+                                                    <select id="sexo" name='sexo' class="form-control" required>
                                                         <option selected disabled></option>
-                                                        <option>Feminino</option>
-                                                        <option>Masculino</option>
+                                                        <option value='feminino'>Feminino</option>
+                                                        <option value='masculino'>Masculino</option>
                                                     </select>
                                                 </div>
+                                                
                                                 <!-- Nome Social -->
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input" id='nomeSocial'>
-                                                    <label for="nomeSocial" class="form-check-label mb-3">Deseja incluir nome social? <a href="http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2016/decreto/D8727.htm" target="_blank">(Decreto nº 8.727/2016)</a></label>
+                                                    <label for="nomeSocial" class="form-check-label mb-3">Deseja incluir nome social? <a href="http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2016/decreto/D8727.htm">(Decreto nº 8.727/2016)</a></label>
                                                 </div>
                                                 <!-- Nome Completo Social -->
                                                 <!-- <div class="form-group">
@@ -398,58 +428,73 @@
                                                         <option>Masculinidade</option>
                                                     </select>
                                                 </div> -->
+                                                
                                                 <!-- CPF (Falta validação) -->
                                                 <div class="form-group">
-                                                    <label for="cpf">CPF <span class='text-danger'><b>*</b></span></label>
-                                                    <input type="text" class='form-control' id="cpf" placeholder="###.###.###-##" required>
+                                                    <label for="CPF">CPF <span class='text-danger'><b>*</b></span></label>
+                                                    <input name='CPF' type="text" class='form-control' id="CPF" placeholder="###.###.###-##" required>
                                                 </div>
-                                                <!-- Informações RG (Falta validação) -->
+                                                <!-- Informações RG -->
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <!-- Número do RG -->
                                                         <div class="form-group">
-                                                            <label for="rg">RG</label>
-                                                            <input type="text" class='form-control' id='rg'>
+                                                            <label for="RG">RG</label>
+                                                            <input name='RG_numero' type="text" class='form-control' id='RG'>
                                                         </div>
                                                     </div>
                                                     <div class="col">
                                                         <!-- UF Emissão -->
                                                         <div class="form-group">
-                                                            <label for="ufEmissao">UF Emissão</label>
-                                                            <select id="ufEmissao" class="form-control"
-                                                                aria-describedby="ufEmissao">
+                                                            <label for="RG_UF">UF Emissão</label>
+                                                            <select name='RG_UF' id="RG_UF" class="form-control"
+                                                                aria-describedby="RG_UF">
                                                                 <option selected disabled></option>
-                                                                <!-- Inserção de Estados -->
+                                                                <option value="AC">Acre</option>
+                                                                <option value="AL">Alagoas</option>
+                                                                <option value="AP">Amapá</option>
+                                                                <option value="AM">Amazonas</option>
+                                                                <option value="BA">Bahia</option>
+                                                                <option value="CE">Ceará</option>
+                                                                <option value="DF">Distrito Federal</option>
+                                                                <option value="ES">Espirito Santo</option>
+                                                                <option value="GO">Goiás</option>
+                                                                <option value="MA">Maranhão</option>
+                                                                <option value="MS">Mato Grosso do Sul</option>
+                                                                <option value="MT">Mato Grosso</option>
+                                                                <option value="MG">Minas Gerais</option>
+                                                                <option value="PA">Pará</option>
+                                                                <option value="PB">Paraíba</option>
+                                                                <option value="PR">Paraná</option>
+                                                                <option value="PE">Pernambuco</option>
+                                                                <option value="PI">Piauí</option>
+                                                                <option value="RJ">Rio de Janeiro</option>
+                                                                <option value="RN">Rio Grande do Norte</option>
+                                                                <option value="RS">Rio Grande do Sul</option>
+                                                                <option value="RO">Rondônia</option>
+                                                                <option value="RR">Roraima</option>
+                                                                <option value="SC">Santa Catarina</option>
+                                                                <option value="SP">São Paulo</option>
+                                                                <option value="SE">Sergipe</option>
+                                                                <option value="TO">Tocantins</option>
                                                             </select>
-                                                            <small id='ufEmissao' class="form-text text-muted">Digite o estado brasileiro que seu RG foi emitido.</small>
+                                                            <small id='RG_UF' class="form-text text-muted">Digite o estado brasileiro que seu RG foi emitido.</small>
                                                         </div>
                                                     </div>
                                                     <div class="col">
                                                         <!-- Orgão Emissor -->
                                                         <div class="form-group">
-                                                            <label for="orgaoEmissor">Orgão Emissor</label>
-                                                            <select id="orgaoEmissor" class="form-control"
-                                                                aria-describedby="orgaoEmissor">
-                                                                <option selected disabled></option>
-                                                                <!-- Inserção de orgãos emissores -->
-                                                            </select>
-                                                            <small id='orgaoEmissor' class="form-text text-muted">Digite o orgão
-                                                                responsável pela emissão do RG.</small>
+                                                            <label for="RG_emissor">Orgão Emissor</label>
+                                                            <input name='RG_emissor' type="text" class="form-control" id='RG_emissor'>
+                                                            <small id='RG_emissor' class="form-text text-muted">Digite o orgão responsável pela emissão do RG.</small>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <!-- Data de Nascimento -->
                                                 <div class="form-group">
-                                                    <label for="dataNascimento">Data de Nascimento <span
-                                                            class='text-danger'><b>*</b></span></label>
+                                                    <label for="dataNascimento">Data de Nascimento <span class='text-danger'><b>*</b></span></label>
                                                     <input type="date" class='form-control' id='dataNascimento' required>
-                                                </div>
-                                                <!-- Deficiência -->
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id='deficiencia'>
-                                                    <label for="deficiencia" class="form-check-label">Possui deficiência?</label>
-                                                </div>
-                                                <!-- Tipo de Deficiência -->                                               
+                                                </div>                                           
                                             </div>
                                         </div>
                                     </div>
@@ -460,14 +505,14 @@
                                             <div class="card-body">
                                                 <!-- CEP -->
                                                 <div class="form-group">
-                                                    <label for="cep-consumidor">CEP <span class='text-danger'><b>*</b></span></label>
-                                                    <input name='cep-consumidor' type="text" aria-describedby="cep-consumidor" class='form-control' id='cep-consumidor' required>
-                                                    <small id='cep-consumidor' class="form-text text-muted">Insira o seu CEP para completar os demais campos.</small>
+                                                    <label for="CEP_consumidor">CEP <span class='text-danger'><b>*</b></span></label>
+                                                    <input name='CEP_consumidor' type="text" aria-describedby="CEP_consumidor" class='form-control' required>
+                                                    <small id='CEP_consumidor' class="form-text text-muted">Insira o seu CEP para completar os demais campos.</small>
                                                 </div>
                                                 <!-- Estado -->
                                                 <div class="form-group">
-                                                    <label for="estado-consumidor">Estado <span class='text-danger'><b>*</b></span></label>
-                                                    <input type="text" class='form-control' id='estado-consumidor' placeholder="Estado" required readonly>
+                                                    <label for="estado_consumidor">Estado <span class='text-danger'><b>*</b></span></label>
+                                                    <input name='estado_consumidor' type="text" class='form-control' id='estado_consumidor' placeholder="Estado" required readonly>
                                                 </div>
                                                 <!-- Cidade -->
                                                 <div class="form-group">
@@ -532,7 +577,7 @@
                             <div class="col-12 col-sm-12 col-lg-6">
                                 <div class="card">
                                     <div class="card-header bg-danger text-white font-weight-bold">
-                                        Dados do Fornecedor<i class="icon fas fa-map-marker-alt"></i>
+                                        Dados do Fornecedor<i class="icon far fa-address-card"></i>
                                     </div>
                                     <div class="card-body">
                                         <!-- Classificação -->
@@ -556,22 +601,42 @@
                                                 <option>Turismo/Viagens</option>
                                             </select>
                                         </div>
+                                        <!-- ID da Empresa -->
+                                        <div class="form-group">
+                                            <label for="idEmpresa">ID da Empresa</label>
+                                            <input type='text' name='idEmpresa' class='form-control' id='idEmpresa'>
+                                        </div>
+                                        <!-- <?php
+                                            $idEmpresa = $_GET['idEmpresa'];
+
+                                            $url = file_get_contents("http://itajuba.myscriptcase.com/scriptcase/devel/conf/grp/Procon/libraries/php/fornecedor_detalhe.php?id=44");
+
+                                            $json = json_decode($url, true);
+
+                                            $fornecedor_detalhe = $json['fornecedor_detalhe'];
+                                            $nome_fornecedor = $fornecedor_detalhe['nome_fornecedor'];
+                                            $tipo = $fornecedor_detalhe['tipo'];
+                                            $rua = $fornecedor_detalhe['rua'];
+                                            $bairro = $fornecedor_detalhe['bairro'];
+                                            $email = $fornecedor_detalhe['email'];
+                                            $telefone = $fornecedor_detalhe['telefone'];
+                                        ?> -->
                                         <!-- Nome da Empresa -->
                                         <div class="form-group">
                                             <label for="nomeEmpresa">Nome da Empresa  <span class='text-danger'><b>*</b></span></label>
-                                            <input type="text" class="form-control" id='nomeEmpresa' required>                                        
-                                        </div>
+                                            <!-- <?php echo "<input type='text' class='form-control' id='nomeEmpresa' required>";?> -->
+                                        </div>                                        
                                         <!-- Nome Fantasia -->
                                         <div class="form-group">
                                             <label for="nomeFantasia">Nome Fantasia</label>
-                                            <input type="text" class="form-control" id='nomeFantasia'>                                        
-                                        </div>
+                                            <!-- <?php echo "<input type='text' value='$nome_fornecedor' class='form-control' id='nomeFantasia'>"; ?> -->
+                                        </div>                                        
                                         <div class="row">
                                             <div class="col-8">
                                                 <!-- Email -->
                                                 <div class="form-group">
                                                     <label for="email">Email</label>
-                                                    <input type="text" class="form-control" id='email'>                                        
+                                                    <!-- <?php echo "<input type='text' value='$email' class='form-control' id='email'>"; ?> -->
                                                 </div>
                                             </div>
                                             <div class="col-4">
@@ -617,7 +682,7 @@
                                             <!-- Bairro -->
                                             <div class="form-group">
                                                 <label for="bairro-fornecedor">Bairro <span class='text-danger'><b>*</b></span></label>
-                                                <input name='bairro-fornecedor' type="text" class='form-control' id='bairro-fornecedor' placeholder="Bairro" required readonly>
+                                                <!-- <?php echo "<input name='bairro-fornecedor' value='$bairro' type='text' class='form-control' id='bairro-fornecedor' placeholder='Bairro' required readonly>"; ?> -->
                                             </div>
                                             <!-- Logradouro e Número -->
                                             <div class="row">
@@ -625,7 +690,7 @@
                                                     <!-- Logradouro -->
                                                     <div class="form-group">
                                                         <label for="logradouro-fornecedor">Logradouro <span class='text-danger'><b>*</b></span></label>
-                                                        <input name='logradouro-fornecedor' type="text" class='form-control' id='logradouro-fornecedor' placeholder="Logradouro" required readonly>
+                                                        <!-- <?php echo "<input name='logradouro-fornecedor' value='$rua' type='text' class='form-control' id='logradouro-fornecedor' placeholder='Logradouro' required readonly>"; ?> -->
                                                     </div>
                                                 </div>
                                                 <div class="col-4">
@@ -642,21 +707,9 @@
                                                 <input type="text" class='form-control' id='complemento' required>
                                             </div>
                                             <!-- Telefones -->
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <!-- Telefone Fixo -->
-                                                    <div class="form-group">
-                                                        <label for="telefoneFixo">Telefone Fixo</label>
-                                                        <input type="text" class='form-control' id='telefoneFixo'>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <!-- Telefone Celular -->
-                                                    <div class="form-group">
-                                                        <label for="telefoneCelular">Telefone Celular</label>
-                                                        <input type="text" class='form-control' id='telefoneCelular'>
-                                                    </div>
-                                                </div>
+                                            <div class="form-group">
+                                                <label for="telefoneCelular">Telefone Celular</label>
+                                                <!-- <?php echo "<input type='text' value='$telefone' class='form-control' id='telefoneCelular'>"; ?> -->
                                             </div>
                                         </form>
                                     </div>
@@ -666,34 +719,17 @@
                     </div>
                     <!-- Detalhes -->
                     <div class="tab-pane container fade pt-3 px-0" id="detalhes">
-                        <div class="row">
+                        <div class="row justify-content-center">
                             <!-- Dados -->
-                            <div class="col-12 col-sm-12 col-lg-12">
+                            <div class="col-12 col-sm-12 col-lg-6">
                                 <div class="card mb-2">
-                                    <div class="card-header bg-danger text-white font-weight-bold">Dados da Compra ou Contratação<i class="icon far fa-address-card"></i></div>
+                                    <div class="card-header bg-danger text-white font-weight-bold">Detalhes da Reclamação<i class="icon fas fa-info-circle"></i></div>
                                     <div class="card-body">
-                                        <!-- "Procurei o fornecedor" -->
-                                        <div class="form-check pb-2">
-                                            <input type="checkbox" id='procurei' class="form-check-input">
-                                            <label for="procurei" class="form-check-label">Procurei o fornecedor para solucionar a questão.</label>                                    
-                                        </div>
                                         <!-- Data da Ocorrência -->
                                         <div class="form-group">
                                             <label for="dataOcorrencia">Data da Ocorrência <span class='text-danger'><b>*</b></span></label>
                                             <input type="date" class='form-control' id='dataOcorrencia' required>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Reclamação -->
-                    <div class="tab-pane container fade pt-3 px-0" id="reclamacao">
-                        <div class="row">
-                            <div class="col-12 col-sm-12 col-lg-12">
-                                <div class="card mb-2">
-                                    <div class="card-header bg-danger text-white font-weight-bold"><i class="icon far fa-address-card"></i></div>
-                                    <div class="card-body">
                                         <!-- Detalhes -->
                                         <div class="form-group">
                                             <label for="detalhes">Descreva em detalhes sua reclamação <span class='text-danger'><b>*</b></span></label>
@@ -713,21 +749,21 @@
                                                 <option>Outros (exceto indenização por danos morais, que só podem ser solicitados por meio de ação judicial)</option>
                                             </select>
                                         </div>
+                                        <!-- Anexos -->
+                                        <div class="form-group">
+                                            <label for="anexos">Anexos</label><br>
+                                            <input id='anexos' type="file">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Anexos -->
-                    <div class="tab-pane container fade pt-3 px-0" id="anexos">
-
-                    </div>
-                    <!-- Finalizar -->
-                    <div class="tab-pane container fade pt-3 px-0" id="finalizar"></div>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="menu"></div>
 
     <script>
@@ -757,23 +793,6 @@
         }
     });
     </script>
-    <!-- Autenticação de usuario -->
-  <script>
-    // Your web app's Firebase configuration
-    var firebaseConfig = {
-      apiKey: "AIzaSyACRG5j_6gR-mZK8o80jD3ZGSHyTgMzxe0",
-      authDomain: "proconvoce.firebaseapp.com",
-      databaseURL: "https://proconvoce.firebaseio.com",
-      projectId: "proconvoce",
-      storageBucket: "proconvoce.appspot.com",
-      messagingSenderId: "645245522688",
-      appId: "1:645245522688:web:0e6b79e6cc9aae31"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-
-  </script>
-<script src="../login/js/auth.js"></script>
 </body>
 
 </html>

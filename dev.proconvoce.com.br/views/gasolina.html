@@ -4,6 +4,7 @@
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Favicon -->
   <link rel="shortcut icon" type="image/x-icon" href="../img/favicon.ico">
@@ -67,7 +68,12 @@
             </div>
           </div>
       </h2>
+      
     <div class="scrolling-wrapper" id="cardsAreaGasolina"></div>
+    <div class="container-fluid text-right mb-4 d-sm-block d-md-none">
+      <p >Arraste para o lado >>> </p>
+    </div>
+    
 <hr>
     <h2><i class="fas fa-gas-pump"></i> Etanol
         <div class="btn-group dropright">
@@ -75,19 +81,22 @@
                 <i style="color: #888;" class="fas fa-info-circle"></i>
             </button>
             <div class="dropdown-menu">
-              Valores na promoção no dinheiro e no cartão de débito
+              *Valores na promoção no dinheiro e no cartão de débito
             </div>
           </div>    
     </h2>
       
-    <div class="scrolling-wrapper" id="cardsAreaEtanol">
-      
+    <div class="scrolling-wrapper" id="cardsAreaEtanol"></div>
+    <div class="container-fluid text-right mb-4 d-sm-block d-md-none">
+      <p >Arraste para o lado >>> </p>
     </div>
 <hr>
     <h2><i class="fas fa-gas-pump"></i> Diesel</h2>
-    <div class="scrolling-wrapper" id="cardsAreaDiesel">
-      
+    <div class="scrolling-wrapper" id="cardsAreaDiesel"></div>
+    <div class="container-fluid text-right mb-4 d-sm-block d-md-none">
+      <p >Arraste para o lado >>> </p>
     </div>
+    
     <!-- informações em baixo das cards -->
     <div id="escolhaCombustivel" class="container-fluid text-right mb-4">
       <h3 id="escolha"></h3>
@@ -111,7 +120,9 @@
       <canvas class='col-xs-12 col-md-4' id="chartDie" height="230px"></canvas>
       <canvas class='col-xs-12 col-md-4' id="chartEta" height="230px"></canvas>
       <canvas class='col-xs-12 col-md-4' id="chartGas" height="230px"></canvas>
-
+    </div>
+    <div class="container-fluid text-right mb-4 d-sm-block d-md-none">
+      <p id="escolha">Arraste para o lado >>></p>
     </div>
     <hr>
     <!-- tabela de combustiveis -->
@@ -174,6 +185,11 @@
 
     <div class="menu"></div>
 
+    <!-- Modal Mapa -->
+  <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+    
+  </div>
+
   </div>
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="../vendor/jquery.js"></script>
@@ -187,10 +203,11 @@
   <script src="../js/gasolina.js"></script>
   <script>
     
-    $(window).on('load',function() {
-          $('.menu').load('menu.html');
-          $('.menu').addClass('hiden');
-      });
+	$(function() {
+		$(".menu").load("menu.html", function() {
+			jQuery('.item-combustivel').addClass('active');
+	        });
+	});
       
     </script>
   <!-- Autenticação de usuario -->
@@ -210,6 +227,7 @@
 
 	</script>
   <script src="../login/js/auth.js"></script>
+
 </body>
 
 </html>

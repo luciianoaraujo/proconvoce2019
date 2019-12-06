@@ -1,6 +1,5 @@
 $(window).on('load', async () => {
     loadTableData('comb');
-    btnArea();
 })
 $('#escolha').on('click', (e) => {
     $('#escolhaInfo').toggleClass('hide');
@@ -20,6 +19,16 @@ class Item {
     }
 }
 
+async function AddCords(fornecedorId) {
+    let url =`https://api.proconvoce.com.br/api/fornecedor_detalhe.php?procon_id=1&id=${fornecedorId}`;
+    let coords = []
+    await $.getJSON(url, (data) => {
+        coords[0] = data.fornecedor_detalhe.latitude;
+        coords[1] = data.fornecedor_detalhe.longitude;
+    })
+    return coords;
+}
+
 async function loadTableData(query) {
     var url = `https://itajuba.myscriptcase.com/scriptcase/devel/conf/grp/Procon/libraries/php/pesquisa_total.php?id=3&qtde=5`;
     let i = 0;
@@ -29,28 +38,29 @@ async function loadTableData(query) {
     let etanol = [];
     let a;
     const vetorDeItems = [];
-    
+
     return await $.getJSON(url, (data) => {
-        
+
         const pesquisa_total = data.pesquisa_total[0];
-        console.log(pesquisa_total)
-        
+
         pesquisa_total.pesquisas.forEach(pesquisa => {
             let dataPesquisa = pesquisa.data_publicacao;
             pesquisa.items.forEach(item => {
                 let itemLocal = new Item();
                 if (item.produto_id == 13 || item.produto_id == 16 || item.produto_id == 17 || item.produto_id == 7 || item.produto_id == 129 || item.produto_id == 15 || item.produto_id == 8 || item.produto_id == 130 || item.produto_id == 14) {
                     itemLocal.nome = item.nome_produto;
+                    itemLocal.fornecedorId = item.indices['fornecedor_menor_id'];
                     itemLocal.fornecedor = item.indices['fornecedor_menor'];
                     itemLocal.preco = item.indices['menor_preco'];
                     itemLocal.data = dataPesquisa;
                     itemLocal.diferenca_menor_maior = item.indices['diferenca_menor_maior'];
                     itemLocal.idp = item.produto_id;
+
                     vetorDeItems.push(itemLocal);
                 }
             });
         });
-        console.log(vetorDeItems)
+
         $.each(vetorDeItems, function (key, value) {
             if (value.nome === 'Diesel') {
                 diesel.push(value);
@@ -70,27 +80,27 @@ async function loadTableData(query) {
                         i = 0;
                         qtd_cards++;
                     } else
-                    if (i == 2) {
-                        gasolina.push(value);
-                        makeTable('#tabelaGasolina', value);
-                        i = 0;
-                        qtd_cards++;
-                    }
-            if (qtd_cards <= 3){
-                if(value.idp == 13 || value.idp == 16 || value.idp == 17){
+                        if (i == 2) {
+                            gasolina.push(value);
+                            makeTable('#tabelaGasolina', value);
+                            i = 0;
+                            qtd_cards++;
+                        }
+            if (qtd_cards <= 3) {
+                if (value.idp == 13 || value.idp == 16 || value.idp == 17) {
                     makeCards('#cardsAreaDiesel', value);
                 }
-                if(value.idp == 8 || value.idp == 130 || value.idp == 14){
+                if (value.idp == 8 || value.idp == 130 || value.idp == 14) {
                     makeCards('#cardsAreaGasolina', value);
                 }
-                if(value.idp == 7 || value.idp == 129 || value.idp == 15){
+                if (value.idp == 7 || value.idp == 129 || value.idp == 15) {
                     makeCards('#cardsAreaEtanol', value);
                 }
             }
         });
-        
+
         makeCharts(diesel, gasolina, etanol);
-        selecionarCombustivel('#escolha',gasolina[0], etanol[0]);
+        selecionarCombustivel('#escolha', gasolina[0], etanol[0]);
         $('#preloader').fadeOut(500, function () { $(this).remove(); });
         $('.menu').removeClass('hiden');
     })
@@ -100,7 +110,8 @@ function makeTable(tableName, value) {
     $(tableName).append(tag);
 }
 
-function makeCards(cardsArea, value) {
+async function makeCards(cardsArea, value) {
+
     value.nome = value.nome.replace('Aditivado', 'Adt.');
     value.nome = value.nome.replace('Aditivada', 'Adt.');
     if (value.nome.length > 22) {
@@ -123,70 +134,52 @@ function makeCards(cardsArea, value) {
                 <div class="col-8">
                     <div>
                         <h6 class="card-title">${value.fornecedor}</h6>
-                        <small style>R$ ${value.diferenca_menor_maior} mais barato</small>
                     </div>
                 </div>
                 <div class="col-4">
                     <button type="button" class="btn btn-outline-light" 
-                    data-toggle="modal" data-target="#Modal${value.id}" data-lat='10.85' data-lng='106.62'>
+                 onclick="abrirModal('${value.fornecedor}','${value.fornecedorId}')">
                         <i class="fas fa-map-marked-alt"></i>
                     </button>
                 </div>
             </div>
         </div>
+        <small style>Diferença de R$${value.diferenca_menor_maior} do mais alto.</small>
     </div>
 </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="Modal${value.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog  modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-      <h4 class="modal-title" id="myModalLabel">${value.nome}:</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-        </div>
-        <div class="row">
-            <div id="map${value.id}" style="height:300px; width:100%"></div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 modal_body_end">
-          <button type="button" class="btn btn-primary btn-lg btn-block">Ligar <i class="fas fa-phone"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 `
-    scriptString = scriptString + `
-        map${value.id} = new google.maps.Map(document.getElementById("map${value.id}"), {
-            center: {lat: ${value.latitude}, lng: ${value.longitude}},
-            zoom: 14,
-        });
-        var marker = new google.maps.Marker({
-            position: {lat: ${value.latitude}, lng: ${value.longitude}}, 
-            map: map${value.id},
-        });
-    `;
-    if (value.id == 8) {
-        scriptString = scriptString + `}
-        `;
-
-        var googleMapsScript = document.createElement('script');
-        scriptString = document.createTextNode(scriptString);
-        googleMapsScript.appendChild(scriptString);
-        document.body.appendChild(googleMapsScript);
-
-        var my_awesome_script = document.createElement('script');
-        my_awesome_script.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=AIzaSyBCnuLREFEtwCwMuLmAG3Mmre7uOXe7g40&callback=drawMap`);
-        document.body.appendChild(my_awesome_script);
-    }
     $(cardsArea).append(tag)
 }
 
+async function abrirModal(fornecedor, fornecedorID){
+    let coords = await AddCords(fornecedorID)
+    let lat = `${coords[0]}`;
+    let lon = `${coords[1]}`;
+
+if(lon.length > 6) {
+    lon = lon.substring(0, (lon.length - 1));
+}
+
+    console.log(coords)
+    let tag = `
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h7 class="modal-title">${fornecedor}</h7>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <iframe src="https://maps.google.com/maps?q=+${lat}+,+${lon}+&hl=en&z=14&amp;output=embed" width="100%" height="400" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div>
+            </div>
+        </div>
+    `;
+    $('#modal').html(tag);
+    $('#modal').modal('show')
+}
 
 async function makeCharts(diesel, gasolina, etanol) {
     let chartD = {}

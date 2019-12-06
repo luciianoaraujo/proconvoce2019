@@ -1,105 +1,199 @@
 <!doctype html>
+
 <html lang="en">
 
+
+
 <head>
+
   <!-- Required meta tags -->
+
   <meta charset="utf-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
   <!-- Favicon -->
+
   <link rel="shortcut icon" type="image/x-icon" href="../img/favicon.ico">
+
   <!-- Bootstrap CSS -->
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+
+
   <title>Procon Web - Cestas básicas</title>
+
   <!-- fontawesome -->
+
   <script src="../vendor/fontawesome-free/js/all.js"></script>
 
-  <!-- Firebase-->  	
+
+
+  <!-- Firebase-->
+
   <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
-  
+
+
+
   <!-- JQuery -->
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+
 
   <!-- CSS personalizado -->
+
   <link rel="stylesheet" href="../css/style.css">
+
   <link rel="stylesheet" href="../css/cards.css">
+
   <link rel="stylesheet" href="../css/animate.css">
+
 </head>
 
+
+
 <body class="container text-center">
-    <div id="preloader">
-        <div class="spinner">
-            <div class="rect1"></div>
-            <div class="rect2"></div>
-            <div class="rect3"></div>
-            <div class="rect4"></div>
-            <div class="rect5"></div>
-        </div>
+
+  <div id="preloader">
+
+    <div class="spinner">
+
+      <div class="rect1"></div>
+
+      <div class="rect2"></div>
+
+      <div class="rect3"></div>
+
+      <div class="rect4"></div>
+
+      <div class="rect5"></div>
+
     </div>
+
+  </div>
+
   <div id="navigationBar"></div>
-    <h1><i class="fas fa-shopping-basket"></i> Cesta Básica</h1>
+
+  <h1><i class="fas fa-shopping-basket"></i> Cesta Básica</h1>
+
   <div class="row">
+
     <div class="col-xs-12 col-md-12 mt-4">
+
       <div class="display-area ranking">
+
         <div class="display-header text-center">
+
           <h3><i class="far fa-chart-bar"></i> 3 Cestas completas mais baratas:</h3>
 
+
+
         </div>
+
         <div class="display-body text-center ">
+
           <div id="displayRanking" class="display-item row container">
+
           </div>
+
         </div>
+
       </div>
+
     </div>
+
     <div class="container">
+
       <h3 class="section-title mt-4"><i class="fas fa-search-dollar"></i> Produtos mais barato nos mercados:</h3>
+
     </div>
-  </div>
-  <div class="row">
-      <div id="cardsArea" class="row mt-4" style="margin-bottom: 4em;"></div>
+
   </div>
 
-  <div id="feedbackArea">
+  <div class="row">
+
+    <div id="cardsArea" class="row mt-4" style="margin-bottom: 4em;"></div>
+
   </div>
+
+
+
+  <div id="feedbackArea">
+
+  </div>
+
+
 
   <div class="menu"></div>
 
   <script>
-      $(window).on('load',function() {
-          $('.menu').load('menu.html');
-          $('.menu').addClass('hiden');
+
+    $(function () {
+      $(".menu").load("menu.html", function () {
+        jQuery('.item-cesta').addClass('active');
       });
+    });
+
   </script>
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
   <script src="../vendor/jquery.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
+
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
-  <script src="../js/index.js"></script>
-  <script src="../js/cesta.js"></script>
-  <!-- Autenticação de usuario -->
-  <script>
-	  // Your web app's Firebase configuration
-	  var firebaseConfig = {
-	    apiKey: "AIzaSyACRG5j_6gR-mZK8o80jD3ZGSHyTgMzxe0",
-	    authDomain: "proconvoce.firebaseapp.com",
-	    databaseURL: "https://proconvoce.firebaseio.com",
-	    projectId: "proconvoce",
-	    storageBucket: "proconvoce.appspot.com",
-	    messagingSenderId: "645245522688",
-	    appId: "1:645245522688:web:0e6b79e6cc9aae31"
-	  };
-	  // Initialize Firebase
-	  firebase.initializeApp(firebaseConfig);
 
-	</script>
+  <script src="../js/index.js"></script>
+
+  <script src="../js/cesta.js"></script>
+
+  <!-- Autenticação de usuario -->
+
+  <script>
+
+    // Your web app's Firebase configuration
+
+    var firebaseConfig = {
+
+      apiKey: "AIzaSyACRG5j_6gR-mZK8o80jD3ZGSHyTgMzxe0",
+
+      authDomain: "proconvoce.firebaseapp.com",
+
+      databaseURL: "https://proconvoce.firebaseio.com",
+
+      projectId: "proconvoce",
+
+      storageBucket: "proconvoce.appspot.com",
+
+      messagingSenderId: "645245522688",
+
+      appId: "1:645245522688:web:0e6b79e6cc9aae31"
+
+    };
+
+    // Initialize Firebase
+
+    firebase.initializeApp(firebaseConfig);
+
+
+
+  </script>
+
   <script src="../login/js/auth.js"></script>
+
 </body>
+
+
 
 </html>
